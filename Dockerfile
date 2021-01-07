@@ -5,6 +5,9 @@ LABEL maintainer "Toshihiro KONDA <kontoshi0317@gmail.com>"
 ARG USER
 ARG PASSWD
 
+RUN sed -i -e "s/^mirrorlist=http:\/\/mirrorlist.centos.org/#mirrorlist=http:\/\/mirrorlist.centos.org/g" /etc/yum.repos.d/CentOS-Base.repo && \
+    sed -i -e "s/^#baseurl=http:\/\/mirror.centos.org/baseurl=http:\/\/vault.centos.org/g" /etc/yum.repos.d/CentOS-Base.repo
+
 RUN yum -y update && \
     yum clean all && \
     yum -y install sudo && \
@@ -15,7 +18,7 @@ RUN yum -y update && \
 RUN cd /home/${USER} && \
     yum -y update && \
     yum -y install gcc gcc-c++ wget openssl-devel && \
-    wget http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.gz && \
+    wget http://mirror.linux-ia64.org/gnu/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.gz && \
     tar xf gcc-10.2.0.tar.gz && \
     rm gcc-10.2.0.tar.gz && \
     cd gcc-10.2.0 && \
@@ -32,49 +35,49 @@ RUN cp /usr/local/lib64/libstdc++.so.6.0.28 /usr/lib64 && \
     ln -s libstdc++.so.6.0.28 libstdc++.so.6
 
 RUN cd /home/${USER} && \
-    wget https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4.tar.gz && \
-    tar xf cmake-3.18.4.tar.gz && \
-    rm cmake-3.18.4.tar.gz && \
-    cd cmake-3.18.4 && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2.tar.gz && \
+    tar xf cmake-3.19.2.tar.gz && \
+    rm cmake-3.19.2.tar.gz && \
+    cd cmake-3.19.2 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
-    cd /home/${USER} && rm -r cmake-3.18.4
+    cd /home/${USER} && rm -r cmake-3.19.2
 
 RUN cd /home/${USER} && \
-    wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tgz && \
-    tar xf Python-3.9.0.tgz && \
-    rm Python-3.9.0.tgz && \
-    cd Python-3.9.0 && \
+    wget https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz && \
+    tar xf Python-3.9.1.tgz && \
+    rm Python-3.9.1.tgz && \
+    cd Python-3.9.1 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
     ln -s /usr/local/bin/python3 /usr/local/bin/python && \
-    cd /home/${USER} && rm -r Python-3.9.0
+    cd /home/${USER} && rm -r Python-3.9.1
 
 RUN cd /home/${USER} && \
-    wget https://github.com/ninja-build/ninja/archive/v1.10.1.tar.gz && \
-    tar -xf v1.10.1.tar.gz && \
-    rm v1.10.1.tar.gz && \
-    cd ninja-1.10.1 && \
+    wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz && \
+    tar -xf v1.10.2.tar.gz && \
+    rm v1.10.2.tar.gz && \
+    cd ninja-1.10.2 && \
     python configure.py --bootstrap && \
     mv ninja /usr/local/bin/ && \
-    cd /home/${USER} && rm -r ninja-1.10.1
+    cd /home/${USER} && rm -r ninja-1.10.2
 
 RUN cd /home/${USER}/ && \
-    wget https://github.com/llvm/llvm-project/archive/llvmorg-11.0.0.tar.gz && \
-    tar xf llvmorg-11.0.0.tar.gz && \
-    rm llvmorg-11.0.0.tar.gz && \
-    cd llvm-project-llvmorg-11.0.0/llvm && \
+    wget https://github.com/llvm/llvm-project/archive/llvmorg-11.0.1.tar.gz && \
+    tar xf llvmorg-11.0.1.tar.gz && \
+    rm llvmorg-11.0.1.tar.gz && \
+    cd llvm-project-llvmorg-11.0.1/llvm && \
     mkdir build && \
     cd build && \
     cmake .. -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local/ -DCMAKE_C_COMPILER=/usr/local/bin/gcc -DCMAKE_CXX_COMPILER=/usr/local/bin/g++ && \
     ninja all && ninja install && \
-    cd /home/${USER} && rm -r llvm-project-llvmorg-11.0.0
+    cd /home/${USER} && rm -r llvm-project-llvmorg-11.0.1
 
 USER ${USER}
 WORKDIR /home/${USER}
