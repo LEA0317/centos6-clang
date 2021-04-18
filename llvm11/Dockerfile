@@ -8,8 +8,8 @@ ARG PASSWD
 RUN sed -i -e "s/^mirrorlist=http:\/\/mirrorlist.centos.org/#mirrorlist=http:\/\/mirrorlist.centos.org/g" /etc/yum.repos.d/CentOS-Base.repo && \
     sed -i -e "s/^#baseurl=http:\/\/mirror.centos.org/baseurl=http:\/\/vault.centos.org/g" /etc/yum.repos.d/CentOS-Base.repo
 
-RUN yum -y update && \
-    yum clean all && \
+RUN yum clean all && \
+    yum -y update && \
     yum -y install sudo && \
     useradd -m ${USER} && \
     echo "${USER}:${PASSWD}" | chpasswd && \
@@ -18,16 +18,16 @@ RUN yum -y update && \
 RUN cd /home/${USER} && \
     yum -y update && \
     yum -y install gcc gcc-c++ wget openssl-devel && \
-    wget http://mirror.linux-ia64.org/gnu/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.gz && \
-    tar xf gcc-10.2.0.tar.gz && \
-    rm gcc-10.2.0.tar.gz && \
-    cd gcc-10.2.0 && \
+    wget http://mirror.linux-ia64.org/gnu/gcc/releases/gcc-10.3.0/gcc-10.3.0.tar.gz && \
+    tar xf gcc-10.3.0.tar.gz && \
+    rm gcc-10.3.0.tar.gz && \
+    cd gcc-10.3.0 && \
     ./contrib/download_prerequisites && \
     mkdir build && cd build && \
     ../configure --enable-languages=c,c++ --prefix=/usr/local/ --enable-bootstrap --disable-multilib && \
     make -j`nproc` && \
     make -j`nproc` install && \
-    cd /home/${USER} && rm -r gcc-10.2.0
+    cd /home/${USER} && rm -r gcc-10.3.0
 
 RUN cp /usr/local/lib64/libstdc++.so.6.0.28 /usr/lib64 && \
     cd /usr/lib64 && \
@@ -35,29 +35,29 @@ RUN cp /usr/local/lib64/libstdc++.so.6.0.28 /usr/lib64 && \
     ln -s libstdc++.so.6.0.28 libstdc++.so.6
 
 RUN cd /home/${USER} && \
-    wget https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz && \
-    tar xf cmake-3.19.5.tar.gz && \
-    rm cmake-3.19.5.tar.gz && \
-    cd cmake-3.19.5 && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1.tar.gz && \
+    tar xf cmake-3.20.1.tar.gz && \
+    rm cmake-3.20.1.tar.gz && \
+    cd cmake-3.20.1 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
-    cd /home/${USER} && rm -r cmake-3.19.5
+    cd /home/${USER} && rm -r cmake-3.20.1
 
 RUN cd /home/${USER} && \
-    wget https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz && \
-    tar xf Python-3.9.1.tgz && \
-    rm Python-3.9.1.tgz && \
-    cd Python-3.9.1 && \
+    wget https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz && \
+    tar xf Python-3.9.4.tgz && \
+    rm Python-3.9.4.tgz && \
+    cd Python-3.9.4 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
     ln -s /usr/local/bin/python3 /usr/local/bin/python && \
-    cd /home/${USER} && rm -r Python-3.9.1
+    cd /home/${USER} && rm -r Python-3.9.4
 
 RUN cd /home/${USER} && \
     wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz && \
@@ -69,7 +69,7 @@ RUN cd /home/${USER} && \
     cd /home/${USER} && rm -r ninja-1.10.2
 
 RUN cd /home/${USER}/ && \
-    wget https://github.com/llvm/llvm-project/archive/llvmorg-11.1.0.tar.gz && \
+    wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-11.1.0.tar.gz && \
     tar xf llvmorg-11.1.0.tar.gz && \
     rm llvmorg-11.1.0.tar.gz && \
     cd llvm-project-llvmorg-11.1.0/llvm && \
