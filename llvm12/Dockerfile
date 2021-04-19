@@ -17,7 +17,7 @@ RUN yum clean all && \
 
 RUN cd /home/${USER} && \
     yum -y update && \
-    yum -y install gcc gcc-c++ wget openssl-devel && \
+    yum -y install gcc gcc-c++ wget openssl-devel texinfo xz && \
     wget http://mirror.linux-ia64.org/gnu/gcc/releases/gcc-10.3.0/gcc-10.3.0.tar.gz && \
     tar xf gcc-10.3.0.tar.gz && \
     rm gcc-10.3.0.tar.gz && \
@@ -68,7 +68,6 @@ RUN cd /home/${USER} && \
     mv ninja /usr/local/bin/ && \
     cd /home/${USER} && rm -r ninja-1.10.2
 
-RUN yum -y install texinfo xz
 RUN cd /home/${USER} && \
     wget https://www.mirrorservice.org/sites/sourceware.org/pub/binutils/snapshots/binutils-2.35.90.tar.xz && \
     xz -dc binutils-2.35.90.tar.xz | tar xfv - && \
