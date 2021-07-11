@@ -35,29 +35,29 @@ RUN cp /usr/local/lib64/libstdc++.so.6.0.28 /usr/lib64 && \
     ln -s libstdc++.so.6.0.28 libstdc++.so.6
 
 RUN cd /home/${USER} && \
-    wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1.tar.gz && \
-    tar xf cmake-3.20.1.tar.gz && \
-    rm cmake-3.20.1.tar.gz && \
-    cd cmake-3.20.1 && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.20.5/cmake-3.20.5.tar.gz && \
+    tar xf cmake-3.20.5.tar.gz && \
+    rm cmake-3.20.5.tar.gz && \
+    cd cmake-3.20.5 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
-    cd /home/${USER} && rm -r cmake-3.20.1
+    cd /home/${USER} && rm -r cmake-3.20.5
 
 RUN cd /home/${USER} && \
-    wget https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz && \
-    tar xf Python-3.9.4.tgz && \
-    rm Python-3.9.4.tgz && \
-    cd Python-3.9.4 && \
+    wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz && \
+    tar xf Python-3.9.6.tgz && \
+    rm Python-3.9.6.tgz && \
+    cd Python-3.9.6 && \
     mkdir build && \
     cd build && \
     ../configure --prefix=/usr/local/ && \
     make -j`nproc` && \
     make -j`nproc` install && \
     ln -s /usr/local/bin/python3 /usr/local/bin/python && \
-    cd /home/${USER} && rm -r Python-3.9.4
+    cd /home/${USER} && rm -r Python-3.9.6
 
 RUN cd /home/${USER} && \
     wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz && \
@@ -69,25 +69,25 @@ RUN cd /home/${USER} && \
     cd /home/${USER} && rm -r ninja-1.10.2
 
 RUN cd /home/${USER} && \
-    wget https://www.mirrorservice.org/sites/sourceware.org/pub/binutils/snapshots/binutils-2.35.90.tar.xz && \
-    xz -dc binutils-2.35.90.tar.xz | tar xfv - && \
-    rm binutils-2.35.90.tar.xz && \
-    cd binutils-2.35.90 && \
+    wget https://ftp.gnu.org/gnu/binutils/binutils-2.36.1.tar.xz && \
+    xz -dc binutils-2.36.1.tar.xz | tar xf - && \
+    rm binutils-2.36.1.tar.xz && \
+    cd binutils-2.36.1 && \
     mkdir build && cd build && \
     ../configure && \
     make -j `nproc` && make -j `nproc` install && \
-    cd /home/${USER} && rm -r binutils-2.35.90
+    cd /home/${USER} && rm -r binutils-2.36.1
 
 RUN cd /home/${USER}/ && \
-    wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-12.0.0.tar.gz && \
-    tar xf llvmorg-12.0.0.tar.gz && \
-    rm llvmorg-12.0.0.tar.gz && \
-    cd llvm-project-llvmorg-12.0.0/llvm && \
+    wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-12.0.1.tar.gz && \
+    tar xf llvmorg-12.0.1.tar.gz && \
+    rm llvmorg-12.0.1.tar.gz && \
+    cd llvm-project-llvmorg-12.0.1/llvm && \
     mkdir build && \
     cd build && \
     cmake .. -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local/ -DCMAKE_C_COMPILER=/usr/local/bin/gcc -DCMAKE_CXX_COMPILER=/usr/local/bin/g++ && \
     ninja all && ninja install && \
-    cd /home/${USER} && rm -r llvm-project-llvmorg-12.0.0
+    cd /home/${USER} && rm -r llvm-project-llvmorg-12.0.1
 
 USER ${USER}
 WORKDIR /home/${USER}
